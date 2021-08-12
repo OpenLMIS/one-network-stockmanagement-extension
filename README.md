@@ -15,10 +15,11 @@ This is Stockmanagement Extension Module for StockEvent postprocess.
  ```shell
  git clone https://github.com/OpenLMIS/openlmis-stockmanagement.git
  ```
-3. To assemble the outputs of project and create jar file run `docker-compose -f docker-compose.yml run builder`.
-4. Edit configuration file `extensions.properties` from `one-network-extensions-config` repository to use your defined extension.
-5. Run builder for `one-network-extensions-config` and build image.
-6. Run `openlmis-ref-distro` using `docker-compose.one-network-stockmanagement-extension.yml` and check if your changes has been applied.
+3. Develop w/ Docker by running `docker-compose run --service-ports stockmanagement-extension`.
+4. To assemble the outputs of project and create jar file run `docker-compose -f docker-compose.yml run builder`.
+5. Edit configuration file `extensions.properties` from `one-network-extensions-config` repository to use your defined extension.
+6. Run builder for `one-network-extensions-config` and build image.
+7. Run `openlmis-ref-distro` using `docker-compose.one-network-stockmanagement-extension.yml` and check if your changes has been applied.
 
 ## <a name="extensions"></a> Example of extensions usage
 

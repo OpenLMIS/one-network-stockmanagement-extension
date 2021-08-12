@@ -13,25 +13,11 @@
  * http://www.gnu.org/licenses.  For additional information contact info@OpenLMIS.org. 
  */
 
-package org.openlmis.stockmanagement.events;
+package org.openlmis.stockmanagement.service;
 
-import org.openlmis.stockmanagement.dto.StockEventDto;
+public class StockEventIntegrationDataException extends Exception {
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-public class StockEventObserver implements PropertyChangeListener {
-  private StockEventDto stockEventDto;
-
-  public void propertyChange(PropertyChangeEvent evt) {
-    this.setStockEvent((StockEventDto) evt.getNewValue());
-  }
-
-  public StockEventDto getStockEvent() {
-    return stockEventDto;
-  }
-
-  public void setStockEvent(StockEventDto stockEventDto) {
-    this.stockEventDto = stockEventDto;
+  public StockEventIntegrationDataException(String msg, Throwable ex) {
+    super(msg, ex);
   }
 }

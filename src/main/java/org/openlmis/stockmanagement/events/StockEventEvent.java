@@ -17,32 +17,32 @@ package org.openlmis.stockmanagement.events;
 
 import org.openlmis.stockmanagement.dto.StockEventDto;
 import org.openlmis.stockmanagement.extension.point.StockEventPostProcessor;
+import org.openlmis.stockmanagement.service.StockEventIntegrationDataException;
+import org.openlmis.stockmanagement.service.StockEventIntegrationDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 
 @Component(value = "StockEventEvent")
 public class StockEventEvent implements StockEventPostProcessor {
-  private StockEventDto stockEventDto;
-  private PropertyChangeSupport support;
+
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
-  public StockEventEvent() {
-    support = new PropertyChangeSupport(this);
+  private final StockEventIntegrationDataService stockEventIntegrationDataService;
+
+  @Autowired
+  public StockEventEvent(StockEventIntegrationDataService stockEventIntegrationDataService) {
+    this.stockEventIntegrationDataService = stockEventIntegrationDataService;
   }
 
   @Override
   public void process(StockEventDto stockEventDto) {
     logger.info("StockEventEvent - processing");
-    support.firePropertyChange("stockEvent", this.stockEventDto, stockEventDto);
-    this.stockEventDto = stockEventDto;
-  }
-
-  public void addPropertyChangeListener(PropertyChangeListener pcl) {
-    logger.info("StockEventEvent - adding listener");
-    support.addPropertyChangeListener(pcl);
+    try {
+      stockEventIntegrationDataService.sendStockEvent(stockEventDto);
+    } catch (StockEventIntegrationDataException ex) {
+      logger.error("Error during send created orderable", ex);
+    }
   }
 }

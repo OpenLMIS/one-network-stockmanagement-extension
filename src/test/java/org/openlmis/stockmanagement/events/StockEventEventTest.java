@@ -17,32 +17,30 @@ package org.openlmis.stockmanagement.events;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.openlmis.stockmanagement.dto.StockEventDto;
-import org.openlmis.stockmanagement.events.StockEventEvent;
-import org.openlmis.stockmanagement.events.StockEventObserver;
-import org.openlmis.stockmanagement.testbuilder.StockEventDtoDataBuilder;
-
-import static org.junit.Assert.assertEquals;
+import org.openlmis.stockmanagement.service.StockEventIntegrationDataException;
+import org.openlmis.stockmanagement.service.StockEventIntegrationDataService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class StockEventEventTest {
 
-  private StockEventDto generateInstance() {
-    return new StockEventDtoDataBuilder().createStockEventDto();
-  }
+  @Mock
+  private StockEventDto stockEventDto;
+
+  @Mock
+  private StockEventIntegrationDataService stockEventIntegrationDataService;
+
+  @InjectMocks
+  private StockEventEvent stockEventEvent;
 
   @Test
-  public void shouldCreateNotificationAfterNewStockEvent() {
-
-    StockEventDto stockEventDto = generateInstance();
-
-    StockEventEvent observable = new StockEventEvent();
-    StockEventObserver observer = new StockEventObserver();
-
-    observable.addPropertyChangeListener(observer);
-
-    observable.process(stockEventDto);
-    assertEquals(observer.getStockEvent(), stockEventDto);
+  public void shouldCallSendStockEventMethod() throws StockEventIntegrationDataException {
+    stockEventEvent.process(stockEventDto);
+    Mockito.verify(stockEventIntegrationDataService, Mockito.atLeastOnce())
+        .sendStockEvent(stockEventDto);
   }
 }
